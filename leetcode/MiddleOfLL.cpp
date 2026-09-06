@@ -10,30 +10,6 @@
  */
 class Solution {
  public:
-  ListNode* middleNode(ListNode* head) {
-    if (head == nullptr or head->next == nullptr) {
-      return head;
-    }
-    // find the length of the LL
-    int count = 0;
-    ListNode* temp = head;
-    while (temp != nullptr) {
-      count++;
-      temp = temp->next;
-    }
-
-    // traverse till there
-    temp = head;
-    int midpoint = (count / 2) + 1;
-    for (int i = 1; i < midpoint; i++) {
-      temp = temp->next;
-    }
-    return temp;
-  }
-};
-// two pointer approach
-class Solution {
- public:
   ListNode* middleNode(ListNode*& head) {
     if (head == nullptr or head->next == nullptr) {
       return head;
