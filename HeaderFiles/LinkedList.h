@@ -147,7 +147,7 @@ void deleteAtByVal(ListNode<T>*& head,
   return;
 }
 
-// Section 02- insertion,deletion
+// Section 02- print , searching , length
 template <typename T>
 void printLL(ListNode<T>*& head) {
   ListNode<int>* temp = head;
@@ -194,4 +194,64 @@ int lengthLL(ListNode<T>*& head) {
     temp = temp->next;
   }
   return count;
+}
+
+// section 03-midpoint
+
+// brute force approach
+// traverse twice in the linked list
+// this returns second midpoint in even and midpoint in odd length ll
+template <typename T>
+ListNode<T>* midPoint01(ListNode<T>*& head) {
+  if (head == nullptr) {
+    return head;
+  }
+
+  // find the length
+  int count = lengthLL(head);
+  int midpoint = (count / 2) + 1;
+
+  // traverse
+  ListNode<T>* temp = head;
+  //(first node is 1);
+  // u have to traverse midpoint -1 times
+  for (int i = 1; i < midpoint; i++) {
+    temp = temp->next;
+  }
+  return temp;
+}
+
+// two pointer approach / tortoise and haze
+// traverse once in ll thru fast and slow pointer
+// move fast by two nodes , slow by 1 till fast cant move any longer
+// this returns second midpoint in even and midpoint in odd length ll
+
+template <typename T>
+ListNode<T>* midPoint02(ListNode<T>*& head) {
+  if (head == nullptr) {
+    return head;
+  }
+  ListNode<T>* fast = head;
+  ListNode<T>* slow = head;
+  while (fast != nullptr and fast->next != nullptr) {
+    fast = fast->next->next;
+    slow = slow->next;
+  }
+  return slow;
+}
+
+// to get 1st middle point in even linked list
+// start fast one node ahead of slow
+template <typename T>
+ListNode<T>* midPoint03(ListNode<T>*& head) {
+  if (head == nullptr) {
+    return head;
+  }
+  ListNode<T>* fast = head->next;
+  ListNode<T>* slow = head;
+  while (fast != nullptr and fast->next != nullptr) {
+    fast = fast->next->next;
+    slow = slow->next;
+  }
+  return slow;
 }
