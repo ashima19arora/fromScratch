@@ -21,6 +21,6 @@ int main() {
   printLL(head01);
   cout << searchInLL(head, 1) << endl;
   cout << searchInLLRecursively(head, 1) << endl;
-  insertAtAnyPos(head01, 11, 3);
   printLL(head01);
+  cout << midPoint02(head01)->val << endl;
 }
