@@ -285,3 +285,79 @@ ListNode<T>* reverseList(ListNode<T>* head) {
   head->next = nullptr;
   return reverseHead;
 }
+
+// reversing part of linked list, nodes , iteratively
+
+template <typename T>
+ListNode<T>* reverseBetweenIteratively(ListNode<T>* head, int left, int right) {
+  // trivial cases
+  if (head == nullptr or left == right) {
+    return head;
+  }
+  // move prev to one node behind left
+  ListNode<T>* dummy = new ListNode(0);
+  dummy->next = head;
+  ListNode<T>* prev = dummy;
+  for (int i = 1; i < left; i++) {
+    prev = prev->next;
+  }
+
+  // move current to left node
+  ListNode<T>* current = prev->next;
+
+  // implement 3 pointer approach
+  ListNode<T>* sectionStart = current;
+  ListNode<T>* sectionPrev = nullptr;
+  ListNode<T>* sectionAgla = nullptr;
+
+  // reverse the nodes left-right+1 times
+  for (int i = 1; i <= right - left + 1; i++) {
+    sectionAgla = sectionStart->next;
+    sectionStart->next = sectionPrev;
+    sectionPrev = sectionStart;
+    sectionStart = sectionAgla;
+  }
+
+  // connect the desired nodes
+  current->next = sectionStart;
+  prev->next = sectionPrev;
+  return dummy->next;
+}
+
+// reversing part of linked list, values , recursively
+
+void F(ListNode<T>* end, ListNode<T>*& start, bool& stop, int left, int right) {
+  // we will check if we are at desired position first before we swap
+  if (right == 1) {
+    return;
+  }
+  // that means we are not at desired position
+  // increment start and end as per
+  end = end->next;
+  if (left > 1) {
+    start = start->next;
+  }
+
+  // now check again if we are at right position
+  F(end, start, stop, left - 1, right - 1);
+  // u r right postion now , now swap if required
+  if (start == end or end->next == start) {
+    stop = true;
+  }
+  if (!stop) {
+    swap(start->val, end->val);
+    start = start->next;
+  }
+  return;
+}
+ListNode<T>* reverseBetween(ListNode<T>* head, int left, int right) {
+  // trivial cases
+  if (head == nullptr or left == right) {
+    return head;
+  }
+  ListNode<T>* start = head;
+  ListNode<T>* end = head;
+  bool stop = false;
+  F(end, start, stop, left, right);
+  return head;
+}
