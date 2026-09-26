@@ -361,3 +361,83 @@ ListNode<T>* reverseBetween(ListNode<T>* head, int left, int right) {
   F(end, start, stop, left, right);
   return head;
 }
+
+// Section05:Cycle creation , detection and removal
+
+template <typename T>
+void cycleCreation(ListNode<T>* head) {
+  if (head == nullptr or head->next == nullptr) {
+    // we can  not create cycle in 0 or 1 length LL
+    return;
+  }
+  // move to tail
+  ListNode<T>* temp = head;
+  while (temp->next != nullptr) {
+    temp = temp->next;
+  }
+  // we are at tail
+  // point tail ka next to a random node to create cycle
+  // or in this case we point to head
+  temp->next = head;
+}
+
+template <typename T>
+bool cycleDetection(ListNode<T>* head) {
+  // floyds algo-1 :
+  // two pointers moving at proportional speed moving in a circle
+  // are bound to meet
+  // explanation - once slow enters the loop , think of fast as trying to catch
+  // up since it moves twice as fast
+  // everytime they move fast gets one step closer to slow (net gain is 1)
+  // since loop is finite and at each iteration the gap between decreases them
+  // by 1 it eventually becomes 0-> meaning they both meet at one node
+
+  if (head == nullptr or head->next == nullptr) {
+    // no cycle exists for 0 or 1 length ll
+    return false;
+  }
+  ListNode<T>* fast = head;
+  ListNode<T>* slow = head;
+  while (fast != nullptr and fast->next != nullptr) {
+    fast = fast->next->next;
+    slow = slow->next;
+    if (fast == slow) {
+      return true;
+    }
+  }
+  return false;
+}
+template <typename T>
+void cycleRemoval(ListNode<T>* head) {
+  // step 1 if cycle exists
+  if (cycleDetection(head) == false) {
+    return;
+  }
+  ListNode<T>* fast = head;
+  ListNode<T>* slow = head;
+  // find the meeting point
+  while (fast != nullptr and fast->next != nullptr) {
+    fast = fast->next->next;
+    slow = slow->next;
+    if (fast == slow) {
+      break;
+    }
+  }
+  // fast and slow are at meeting pt
+  // now find the origin of cycle
+  // floyd's algo 2
+  // dist between head and oc = dist between oc and meeting pt
+  fast = head;
+  ListNode<T>* prev = head;
+  while (prev->next != slow) {
+    prev = prev->next;
+  }
+  while (fast != slow) {
+    prev = prev->next;
+    fast = fast->next;
+    slow = slow->next;
+  }
+  // slow anf fast are at oc
+  // prev is at last node of cycle
+  prev->next = nullptr;
+}
