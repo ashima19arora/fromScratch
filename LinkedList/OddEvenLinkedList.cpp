@@ -8,6 +8,7 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+// 4 pointer  approach
 class Solution {
  public:
   ListNode* oddEvenList(ListNode*& head) {
